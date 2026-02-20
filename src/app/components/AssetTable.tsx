@@ -1,4 +1,4 @@
-import {AssetData} from '../../../lib/parseAssets';
+import type {AssetData} from '../../../lib/parseAssets';
 
 interface AssetTableProps {
     readonly data: AssetData[];

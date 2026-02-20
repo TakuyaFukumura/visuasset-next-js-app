@@ -10,7 +10,7 @@ import {
     Legend,
     ResponsiveContainer,
 } from 'recharts';
-import {AssetData} from '../../../lib/parseAssets';
+import type {AssetData} from '../../../lib/parseAssets';
 
 interface AssetChartProps {
     readonly data: AssetData[];

@@ -65,4 +65,34 @@ describe('parseAssets', () => {
         expect(data[1].year).toBe(2021);
         expect(data[2].year).toBe(2022);
     });
+
+    it('ヘッダーが不正な場合は例外を投げる', async () => {
+        const invalidHeaderCsv = `year,stocks,cash,invalid
+2020,100,200,50
+`;
+        fs.writeFileSync(testCsvPath, invalidHeaderCsv, 'utf-8');
+
+        const {parseAssets} = await import('../../lib/parseAssets');
+        expect(() => parseAssets()).toThrow('Invalid header in assets.csv');
+    });
+
+    it('カラム数が不足している行は例外を投げる', async () => {
+        const invalidColumnsCsv = `year,stocks,cash,crypto
+2020,100,200
+`;
+        fs.writeFileSync(testCsvPath, invalidColumnsCsv, 'utf-8');
+
+        const {parseAssets} = await import('../../lib/parseAssets');
+        expect(() => parseAssets()).toThrow('Invalid column count in assets.csv at line 2');
+    });
+
+    it('数値以外の値が含まれている行は例外を投げる', async () => {
+        const invalidValueCsv = `year,stocks,cash,crypto
+2020,abc,200,50
+`;
+        fs.writeFileSync(testCsvPath, invalidValueCsv, 'utf-8');
+
+        const {parseAssets} = await import('../../lib/parseAssets');
+        expect(() => parseAssets()).toThrow('Non-numeric value found in assets.csv at line 2');
+    });
 });
