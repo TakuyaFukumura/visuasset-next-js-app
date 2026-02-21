@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import {render, screen, fireEvent} from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import {DarkModeProvider} from '@/app/components/DarkModeProvider';
 import Header from '../../../../src/app/components/Header';
 import '@testing-library/jest-dom';
@@ -38,7 +38,7 @@ describe('Header', () => {
         it('ヘッダータイトルが表示される', () => {
             renderWithProvider();
 
-            expect(screen.getByText('visuasset-next-js-app')).toBeInTheDocument();
+            expect(screen.getByText('visuasset')).toBeInTheDocument();
         });
 
         it('ヘッダーのHTML構造が正しい', () => {
