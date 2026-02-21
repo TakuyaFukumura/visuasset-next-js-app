@@ -1,0 +1,180 @@
+'use client';
+
+import {useState} from 'react';
+import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from 'recharts';
+import type {AssetData} from '../../../lib/parseAssets';
+
+interface SimulationChartProps {
+    readonly latestData: AssetData;
+}
+
+interface SimulationSettings {
+    annualYield: number;
+    inflationRate: number;
+    monthlyContribution: number;
+    projectionYears: number;
+}
+
+interface SimulationDataPoint {
+    year: number;
+    nominal: number;
+    real: number;
+}
+
+function calcSimulation(latestData: AssetData, settings: SimulationSettings): SimulationDataPoint[] {
+    const {annualYield, inflationRate, monthlyContribution, projectionYears} = settings;
+    const r = annualYield / 100;
+    const inflation = inflationRate / 100;
+    const monthlyRate = r / 12;
+    const startYear = latestData.year;
+    const {stocks, cash, crypto} = latestData;
+
+    const result: SimulationDataPoint[] = [];
+
+    for (let n = 0; n <= projectionYears; n++) {
+        let stocksValue: number;
+        if (monthlyRate === 0) {
+            stocksValue = stocks * Math.pow(1 + r, n) + monthlyContribution * 12 * n;
+        } else {
+            const fvInitial = stocks * Math.pow(1 + r, n);
+            const fvContributions =
+                monthlyContribution * (Math.pow(1 + monthlyRate, 12 * n) - 1) / monthlyRate;
+            stocksValue = fvInitial + fvContributions;
+        }
+
+        const nominal = stocksValue + cash + crypto;
+        const real = inflation === 0 ? nominal : nominal / Math.pow(1 + inflation, n);
+
+        result.push({
+            year: startYear + n,
+            nominal: Math.round(nominal),
+            real: Math.round(real),
+        });
+    }
+
+    return result;
+}
+
+export default function SimulationChart({latestData}: SimulationChartProps) {
+    const [settings, setSettings] = useState<SimulationSettings>({
+        annualYield: 5,
+        inflationRate: 2,
+        monthlyContribution: 0,
+        projectionYears: 30,
+    });
+
+    const data = calcSimulation(latestData, settings);
+
+    const handleChange = (key: keyof SimulationSettings) => (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = Number(e.target.value);
+        if (!Number.isFinite(value)) return;
+        setSettings((prev) => ({...prev, [key]: value}));
+    };
+
+    return (
+        <div>
+            <div
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div>
+                    <label
+                        htmlFor="annualYield"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        利回り（%）
+                    </label>
+                    <input
+                        id="annualYield"
+                        type="number"
+                        min={0}
+                        max={100}
+                        step={0.1}
+                        value={settings.annualYield}
+                        onChange={handleChange('annualYield')}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div>
+                    <label
+                        htmlFor="inflationRate"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        インフレ率（%）
+                    </label>
+                    <input
+                        id="inflationRate"
+                        type="number"
+                        min={0}
+                        max={100}
+                        step={0.1}
+                        value={settings.inflationRate}
+                        onChange={handleChange('inflationRate')}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div>
+                    <label
+                        htmlFor="monthlyContribution"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        月々の積立額（万円）
+                    </label>
+                    <input
+                        id="monthlyContribution"
+                        type="number"
+                        min={0}
+                        step={1}
+                        value={settings.monthlyContribution}
+                        onChange={handleChange('monthlyContribution')}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+                <div>
+                    <label
+                        htmlFor="projectionYears"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        期間（年）
+                    </label>
+                    <input
+                        id="projectionYears"
+                        type="number"
+                        min={1}
+                        max={50}
+                        step={1}
+                        value={settings.projectionYears}
+                        onChange={handleChange('projectionYears')}
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
+                <ResponsiveContainer width="100%" height={400}>
+                    <LineChart data={data} margin={{top: 16, right: 16, left: 16, bottom: 8}}>
+                        <CartesianGrid strokeDasharray="3 3"/>
+                        <XAxis dataKey="year"/>
+                        <YAxis unit="万円"/>
+                        <Tooltip formatter={(value) => `${Number(value).toLocaleString()}万円`}/>
+                        <Legend/>
+                        <Line
+                            type="monotone"
+                            dataKey="nominal"
+                            name="名目資産額"
+                            stroke="#3b82f6"
+                            dot={false}
+                            strokeWidth={2}
+                        />
+                        <Line
+                            type="monotone"
+                            dataKey="real"
+                            name="インフレ調整後実質価値"
+                            stroke="#f97316"
+                            dot={false}
+                            strokeWidth={2}
+                        />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+                ※ このシミュレーションは参考値です。将来の資産を保証するものではありません。運用利回りは株式資産にのみ適用し、税金・手数料等は考慮していません。
+            </p>
+        </div>
+    );
+}

@@ -61,6 +61,9 @@ export default function Header() {
                             <Link href="/portfolio" className={navLinkClass('/portfolio')}>
                                 資産ポートフォリオ
                             </Link>
+                            <Link href="/simulation" className={navLinkClass('/simulation')}>
+                                資産シミュレーション
+                            </Link>
                         </nav>
                     </div>
 
