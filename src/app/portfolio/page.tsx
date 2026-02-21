@@ -6,9 +6,9 @@ import {GENRE_COLORS, GENRE_NAMES} from '../constants/genres';
 
 export default async function PortfolioPage({
     searchParams,
-}: {
-    searchParams: Promise<{year?: string}>;
-}) {
+}: Readonly<{
+    searchParams: Promise<{ year?: string }>;
+}>) {
     const params = await searchParams;
     const allData = parseAssets();
 
@@ -19,7 +19,7 @@ export default async function PortfolioPage({
     const years = allData.map((d) => d.year);
     const latestYear = allData[allData.length - 1].year;
 
-    const yearParam = params.year ? parseInt(params.year, 10) : latestYear;
+    const yearParam = params.year ? Number.parseInt(params.year, 10) : latestYear;
     const currentYear = years.includes(yearParam) ? yearParam : latestYear;
 
     const yearData = allData.find((d) => d.year === currentYear);
@@ -40,12 +40,20 @@ export default async function PortfolioPage({
     const nextYear = years[currentIndex + 1] ?? null;
 
     return (
-        <div className="font-sans min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">
+        <div className="font-sans min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">
             <main className="max-w-4xl mx-auto">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">資産ポートフォリオ</h2>
 
                 <div className="flex items-center justify-center gap-6 mb-6">
-                    {prevYear !== null ? (
+                    {prevYear === null ? (
+                        <button
+                            disabled
+                            className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold cursor-not-allowed"
+                            aria-label="前の年へ"
+                        >
+                            ←
+                        </button>
+                    ) : (
                         <Link
                             href={`/portfolio?year=${prevYear}`}
                             className="px-3 py-1 rounded-lg bg-white dark:bg-gray-700 shadow hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold transition-colors"
@@ -53,19 +61,19 @@ export default async function PortfolioPage({
                         >
                             ←
                         </Link>
-                    ) : (
-                        <button
-                            disabled
-                            className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold cursor-not-allowed"
-                            aria-label="前の年へ"
-                        >
-                            ←
-                        </button>
                     )}
                     <span className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                         {currentYear}年
                     </span>
-                    {nextYear !== null ? (
+                    {nextYear === null ? (
+                        <button
+                            disabled
+                            className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold cursor-not-allowed"
+                            aria-label="次の年へ"
+                        >
+                            →
+                        </button>
+                    ) : (
                         <Link
                             href={`/portfolio?year=${nextYear}`}
                             className="px-3 py-1 rounded-lg bg-white dark:bg-gray-700 shadow hover:bg-gray-50 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold transition-colors"
@@ -73,14 +81,6 @@ export default async function PortfolioPage({
                         >
                             →
                         </Link>
-                    ) : (
-                        <button
-                            disabled
-                            className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold cursor-not-allowed"
-                            aria-label="次の年へ"
-                        >
-                            →
-                        </button>
                     )}
                 </div>
 
