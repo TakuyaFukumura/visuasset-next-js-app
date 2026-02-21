@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.3.1] - 2026-02-21
+
+### Changed
+
+- `src/app/components/PortfolioChart.tsx`：recharts の非推奨コンポーネント `Cell` を削除し、データの `fill` プロパティを `Pie` が直接読み込む方式に変更（`TS6385: 'Cell' is deprecated.` 警告の対応）
+
 ## [0.3.0] - 2026-02-21
 
 ### Added

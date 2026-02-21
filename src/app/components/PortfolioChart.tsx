@@ -1,6 +1,6 @@
 'use client';
 
-import {Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip} from 'recharts';
+import {Legend, Pie, PieChart, ResponsiveContainer, Tooltip} from 'recharts';
 import type {PortfolioEntry} from '../types/portfolio';
 
 interface PortfolioChartProps {
@@ -21,11 +21,7 @@ export default function PortfolioChart({data}: PortfolioChartProps) {
                     label={({name, percent}: { name?: string; percent?: number }) =>
                         `${name ?? ''} ${((percent ?? 0) * 100).toFixed(1)}%`
                     }
-                >
-                    {data.map((entry) => (
-                        <Cell key={entry.name} fill={entry.fill}/>
-                    ))}
-                </Pie>
+                />
                 <Tooltip formatter={(value) => `${value}万円`}/>
                 <Legend/>
             </PieChart>
