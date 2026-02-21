@@ -2,18 +2,7 @@ import Link from 'next/link';
 import {parseAssets} from '../../../lib/parseAssets';
 import PortfolioChart from '../components/PortfolioChart';
 import PortfolioTable from '../components/PortfolioTable';
-
-const GENRE_COLORS: Record<string, string> = {
-    stocks: '#3b82f6',
-    cash: '#22c55e',
-    crypto: '#f59e0b',
-};
-
-const GENRE_NAMES: Record<string, string> = {
-    stocks: '株式',
-    cash: '現預金',
-    crypto: '暗号資産',
-};
+import {GENRE_COLORS, GENRE_NAMES} from '../constants/genres';
 
 export default async function PortfolioPage({
     searchParams,
@@ -22,6 +11,11 @@ export default async function PortfolioPage({
 }) {
     const params = await searchParams;
     const allData = parseAssets();
+
+    if (allData.length === 0) {
+        throw new Error('No portfolio data available');
+    }
+
     const years = allData.map((d) => d.year);
     const latestYear = Math.max(...years);
 
@@ -37,12 +31,14 @@ export default async function PortfolioPage({
     const portfolioData = (['stocks', 'cash', 'crypto'] as const).map((key) => ({
         name: GENRE_NAMES[key],
         value: yearData[key],
-        percentage: (yearData[key] / total) * 100,
+        percentage: total > 0 ? (yearData[key] / total) * 100 : 0,
         fill: GENRE_COLORS[key],
     }));
 
-    const prevYear = years.filter((y) => y < currentYear).sort((a, b) => b - a)[0] ?? null;
-    const nextYear = years.filter((y) => y > currentYear).sort((a, b) => a - b)[0] ?? null;
+    const sortedYears = [...years].sort((a, b) => a - b);
+    const currentIndex = sortedYears.indexOf(currentYear);
+    const prevYear = sortedYears[currentIndex - 1] ?? null;
+    const nextYear = sortedYears[currentIndex + 1] ?? null;
 
     return (
         <div className="font-sans min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">
@@ -59,12 +55,13 @@ export default async function PortfolioPage({
                             ←
                         </Link>
                     ) : (
-                        <span
+                        <button
+                            disabled
                             className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold cursor-not-allowed"
-                            aria-disabled="true"
+                            aria-label="前の年へ"
                         >
                             ←
-                        </span>
+                        </button>
                     )}
                     <span className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                         {currentYear}年
@@ -78,12 +75,13 @@ export default async function PortfolioPage({
                             →
                         </Link>
                     ) : (
-                        <span
+                        <button
+                            disabled
                             className="px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-600 font-bold cursor-not-allowed"
-                            aria-disabled="true"
+                            aria-label="次の年へ"
                         >
                             →
-                        </span>
+                        </button>
                     )}
                 </div>
 
