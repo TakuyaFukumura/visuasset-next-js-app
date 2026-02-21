@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.3.0] - 2026-02-21
+
+### Added
+
+- 資産ポートフォリオ画面（`/portfolio`）の追加
+- 年ナビゲーション（← / →ボタンで前後年へ移動、端年では非活性）
+- Recharts の `PieChart` を使った年別資産構成の円グラフ（`src/app/components/PortfolioChart.tsx`）
+- 資産割合一覧表（ジャンル・金額・割合%を表示、`src/app/components/PortfolioTable.tsx`）
+- `__tests__/src/app/components/PortfolioTable.test.tsx`：PortfolioTable のユニットテスト
+
+### Removed
+
+- `docs/asset-portfolio-screen-spec.md`（実装完了のため削除）
+
 ## [0.2.0] - 2026-02-20
 
 ### Added

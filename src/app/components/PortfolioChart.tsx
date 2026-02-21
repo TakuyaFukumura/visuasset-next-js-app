@@ -1,0 +1,40 @@
+'use client';
+
+import {PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer} from 'recharts';
+
+export interface PortfolioEntry {
+    name: string;
+    value: number;
+    percentage: number;
+    fill: string;
+}
+
+interface PortfolioChartProps {
+    readonly data: PortfolioEntry[];
+}
+
+export default function PortfolioChart({data}: PortfolioChartProps) {
+    return (
+        <ResponsiveContainer width="100%" height={320}>
+            <PieChart>
+                <Pie
+                    data={data}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={120}
+                    label={({name, percent}: {name?: string; percent?: number}) =>
+                        `${name ?? ''} ${((percent ?? 0) * 100).toFixed(1)}%`
+                    }
+                >
+                    {data.map((entry) => (
+                        <Cell key={entry.name} fill={entry.fill} />
+                    ))}
+                </Pie>
+                <Tooltip formatter={(value) => `${value}万円`} />
+                <Legend />
+            </PieChart>
+        </ResponsiveContainer>
+    );
+}
