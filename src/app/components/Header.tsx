@@ -33,7 +33,10 @@ export default function Header() {
     };
 
     const navLinkClass = (href: string) => {
-        const isActive = pathname !== null && (pathname === href || (href !== '/' && pathname.startsWith(href)));
+        const isActive =
+            pathname !== null &&
+            (pathname === href ||
+                (href !== '/' && (pathname.startsWith(href + '/') || pathname.startsWith(href + '?'))));
         return `px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 ${
             isActive
                 ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30'

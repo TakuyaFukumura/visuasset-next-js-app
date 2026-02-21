@@ -8,11 +8,18 @@
 - 年ナビゲーション（← / →ボタンで前後年へ移動、端年では非活性）
 - Recharts の `PieChart` を使った年別資産構成の円グラフ（`src/app/components/PortfolioChart.tsx`）
 - 資産割合一覧表（ジャンル・金額・割合%を表示、`src/app/components/PortfolioTable.tsx`）
+- `src/app/constants/genres.ts`：資産ジャンルの共通定数（`GenreKey`型・色・名称）
 - `__tests__/src/app/components/PortfolioTable.test.tsx`：PortfolioTable のユニットテスト
+- `__tests__/src/app/components/PortfolioChart.test.tsx`：PortfolioChart のユニットテスト
 
 ### Removed
 
 - `docs/asset-portfolio-screen-spec.md`（実装完了のため削除）
+
+### Changed
+
+- `src/app/components/Header.tsx`：資産推移画面と資産ポートフォリオ画面へのナビゲーションリンクを追加
+- `src/app/components/AssetChart.tsx`：ジャンル定義を共通定数（`src/app/constants/genres.ts`）にリファクタリング
 
 ## [0.2.0] - 2026-02-20
 

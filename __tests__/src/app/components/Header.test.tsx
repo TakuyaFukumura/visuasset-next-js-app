@@ -11,7 +11,17 @@ import {DarkModeProvider} from '@/app/components/DarkModeProvider';
 import Header from '../../../../src/app/components/Header';
 import '@testing-library/jest-dom';
 
+// usePathname のモック
+const mockUsePathname = jest.fn<string | null, []>();
+jest.mock('next/navigation', () => ({
+    usePathname: () => mockUsePathname(),
+}));
+
 describe('Header', () => {
+    beforeEach(() => {
+        mockUsePathname.mockReturnValue('/');
+    });
+
     const renderWithProvider = (initialTheme?: 'light' | 'dark') => {
         if (initialTheme) {
             window.localStorage.getItem = jest.fn(() => initialTheme);
@@ -199,6 +209,58 @@ describe('Header', () => {
 
             const button = screen.getByRole('button');
             expect(button).toHaveClass('flex', 'items-center', 'gap-2');
+        });
+    });
+
+    describe('ナビゲーション', () => {
+        it('資産推移リンクが表示される', () => {
+            renderWithProvider();
+            expect(screen.getByText('資産推移')).toBeInTheDocument();
+        });
+
+        it('資産ポートフォリオリンクが表示される', () => {
+            renderWithProvider();
+            expect(screen.getByText('資産ポートフォリオ')).toBeInTheDocument();
+        });
+
+        it('資産推移リンクのhref属性が正しい', () => {
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産推移'});
+            expect(link).toHaveAttribute('href', '/');
+        });
+
+        it('資産ポートフォリオリンクのhref属性が正しい', () => {
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産ポートフォリオ'});
+            expect(link).toHaveAttribute('href', '/portfolio');
+        });
+
+        it('トップページ（/）ではリンクがアクティブ状態になる', () => {
+            mockUsePathname.mockReturnValue('/');
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産推移'});
+            expect(link).toHaveClass('text-blue-600');
+        });
+
+        it('トップページ（/）ではポートフォリオリンクが非アクティブ状態になる', () => {
+            mockUsePathname.mockReturnValue('/');
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産ポートフォリオ'});
+            expect(link).not.toHaveClass('text-blue-600');
+        });
+
+        it('ポートフォリオページ（/portfolio）ではポートフォリオリンクがアクティブ状態になる', () => {
+            mockUsePathname.mockReturnValue('/portfolio');
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産ポートフォリオ'});
+            expect(link).toHaveClass('text-blue-600');
+        });
+
+        it('ポートフォリオページ（/portfolio）では資産推移リンクが非アクティブ状態になる', () => {
+            mockUsePathname.mockReturnValue('/portfolio');
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産推移'});
+            expect(link).not.toHaveClass('text-blue-600');
         });
     });
 });

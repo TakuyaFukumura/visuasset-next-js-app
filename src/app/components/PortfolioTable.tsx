@@ -27,7 +27,7 @@ export default function PortfolioTable({data, total}: PortfolioTableProps) {
                     <tr className="bg-gray-100 dark:bg-gray-700 font-semibold">
                         <td className="border border-gray-300 dark:border-gray-600 px-4 py-2">合計</td>
                         <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{total}</td>
-                        <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">100.0</td>
+                        <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{data.reduce((sum, row) => sum + row.percentage, 0).toFixed(1)}</td>
                     </tr>
                 </tbody>
             </table>
