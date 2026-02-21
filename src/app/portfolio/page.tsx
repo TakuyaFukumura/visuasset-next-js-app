@@ -17,7 +17,7 @@ export default async function PortfolioPage({
     }
 
     const years = allData.map((d) => d.year);
-    const latestYear = allData[allData.length - 1].year;
+    const latestYear = allData.at(-1)!.year;
 
     const yearParam = params.year ? Number.parseInt(params.year, 10) : latestYear;
     const currentYear = years.includes(yearParam) ? yearParam : latestYear;
