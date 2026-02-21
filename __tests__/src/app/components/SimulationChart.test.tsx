@@ -4,7 +4,7 @@
 
 import React from 'react';
 import {fireEvent, render, screen} from '@testing-library/react';
-import SimulationChart from '../../../../src/app/components/SimulationChart';
+import SimulationChart, {calcSimulation} from '../../../../src/app/components/SimulationChart';
 import '@testing-library/jest-dom';
 import type {AssetData} from '../../../../lib/parseAssets';
 
@@ -136,5 +136,88 @@ describe('SimulationChart', () => {
             render(<SimulationChart latestData={sampleData}/>);
             expect(screen.getByText(/このシミュレーションは参考値です/)).toBeInTheDocument();
         });
+    });
+
+    describe('入力バリデーション', () => {
+        it('利回りに負の値を入力しても設定が変わらない', () => {
+            render(<SimulationChart latestData={sampleData}/>);
+            const input = screen.getByLabelText('利回り（%）') as HTMLInputElement;
+            fireEvent.change(input, {target: {value: '-1'}});
+            expect(input.value).toBe('5');
+        });
+
+        it('インフレ率に負の値を入力しても設定が変わらない', () => {
+            render(<SimulationChart latestData={sampleData}/>);
+            const input = screen.getByLabelText('インフレ率（%）') as HTMLInputElement;
+            fireEvent.change(input, {target: {value: '-1'}});
+            expect(input.value).toBe('2');
+        });
+
+        it('月々の積立額に負の値を入力しても設定が変わらない', () => {
+            render(<SimulationChart latestData={sampleData}/>);
+            const input = screen.getByLabelText('月々の積立額（万円）') as HTMLInputElement;
+            fireEvent.change(input, {target: {value: '-1'}});
+            expect(input.value).toBe('0');
+        });
+
+        it('期間に 0 を入力しても設定が変わらない', () => {
+            render(<SimulationChart latestData={sampleData}/>);
+            const input = screen.getByLabelText('期間（年）') as HTMLInputElement;
+            fireEvent.change(input, {target: {value: '0'}});
+            expect(input.value).toBe('30');
+        });
+    });
+});
+
+describe('calcSimulation', () => {
+    const baseData: AssetData = {year: 2025, stocks: 1000, cash: 150, crypto: 40};
+
+    it('n=0 のとき初期値がそのまま返る', () => {
+        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 0});
+        expect(result).toHaveLength(1);
+        expect(result[0].year).toBe(2025);
+        expect(result[0].nominal).toBe(1190);
+        expect(result[0].real).toBe(1190);
+    });
+
+    it('利回り 0%・インフレ率 0%・積立額 0 のとき名目と実質が変化しない', () => {
+        const result = calcSimulation(baseData, {annualYield: 0, inflationRate: 0, monthlyContribution: 0, projectionYears: 10});
+        const last = result[result.length - 1];
+        expect(last.nominal).toBe(1190);
+        expect(last.real).toBe(1190);
+    });
+
+    it('利回りが正のとき名目資産額が増加する', () => {
+        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 0, monthlyContribution: 0, projectionYears: 10});
+        expect(result[10].nominal).toBeGreaterThan(result[0].nominal);
+    });
+
+    it('インフレ率が正のとき実質価値は名目資産額より小さい（n>0）', () => {
+        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 10});
+        expect(result[10].real).toBeLessThan(result[10].nominal);
+    });
+
+    it('月々の積立額が正のとき名目資産額がさらに増加する', () => {
+        const withContrib = calcSimulation(baseData, {annualYield: 5, inflationRate: 0, monthlyContribution: 10, projectionYears: 10});
+        const withoutContrib = calcSimulation(baseData, {annualYield: 5, inflationRate: 0, monthlyContribution: 0, projectionYears: 10});
+        expect(withContrib[10].nominal).toBeGreaterThan(withoutContrib[10].nominal);
+    });
+
+    it('返り値の要素数がシミュレーション期間 + 1 である', () => {
+        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 30});
+        expect(result).toHaveLength(31);
+    });
+
+    it('年が連続して正しくインクリメントされる', () => {
+        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 3});
+        expect(result.map((d) => d.year)).toEqual([2025, 2026, 2027, 2028]);
+    });
+
+    it('利回り 0%・積立額あり のとき積立分だけ増加する', () => {
+        const monthlyContribution = 5;
+        const result = calcSimulation(baseData, {annualYield: 0, inflationRate: 0, monthlyContribution, projectionYears: 1});
+        // 1年後: stocks + monthlyContribution×12ヶ月、cash・cryptoは変化なし
+        const expectedNominal = baseData.stocks + monthlyContribution * 12 + baseData.cash + baseData.crypto;
+        expect(result[1].nominal).toBe(expectedNominal);
     });
 });

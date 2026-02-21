@@ -1,6 +1,6 @@
 'use client';
 
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from 'recharts';
 import type {AssetData} from '../../../lib/parseAssets';
 
@@ -15,13 +15,13 @@ interface SimulationSettings {
     projectionYears: number;
 }
 
-interface SimulationDataPoint {
+export interface SimulationDataPoint {
     year: number;
     nominal: number;
     real: number;
 }
 
-function calcSimulation(latestData: AssetData, settings: SimulationSettings): SimulationDataPoint[] {
+export function calcSimulation(latestData: AssetData, settings: SimulationSettings): SimulationDataPoint[] {
     const {annualYield, inflationRate, monthlyContribution, projectionYears} = settings;
     const r = annualYield / 100;
     const inflation = inflationRate / 100;
@@ -63,11 +63,20 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
         projectionYears: 30,
     });
 
-    const data = calcSimulation(latestData, settings);
+    const data = useMemo(() => calcSimulation(latestData, settings), [latestData, settings]);
 
     const handleChange = (key: keyof SimulationSettings) => (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = Number(e.target.value);
         if (!Number.isFinite(value)) return;
+        if (
+            (key === 'annualYield' || key === 'inflationRate' || key === 'monthlyContribution') &&
+            value < 0
+        ) {
+            return;
+        }
+        if (key === 'projectionYears' && value < 1) {
+            return;
+        }
         setSettings((prev) => ({...prev, [key]: value}));
     };
 
@@ -89,8 +98,10 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         step={0.1}
                         value={settings.annualYield}
                         onChange={handleChange('annualYield')}
+                        aria-describedby="annualYield-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    <span id="annualYield-desc" className="sr-only">株式資産に適用する年間運用利回りをパーセントで入力してください（0〜100）</span>
                 </div>
                 <div>
                     <label
@@ -106,8 +117,10 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         step={0.1}
                         value={settings.inflationRate}
                         onChange={handleChange('inflationRate')}
+                        aria-describedby="inflationRate-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    <span id="inflationRate-desc" className="sr-only">物価上昇率をパーセントで入力してください（0〜100）</span>
                 </div>
                 <div>
                     <label
@@ -122,8 +135,10 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         step={1}
                         value={settings.monthlyContribution}
                         onChange={handleChange('monthlyContribution')}
+                        aria-describedby="monthlyContribution-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    <span id="monthlyContribution-desc" className="sr-only">毎月追加で積み立てる金額を万円単位で入力してください（0以上）</span>
                 </div>
                 <div>
                     <label
@@ -139,8 +154,10 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         step={1}
                         value={settings.projectionYears}
                         onChange={handleChange('projectionYears')}
+                        aria-describedby="projectionYears-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    <span id="projectionYears-desc" className="sr-only">シミュレーションする期間を年単位で入力してください（1〜50）</span>
                 </div>
             </div>
 
