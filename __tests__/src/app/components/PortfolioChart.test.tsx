@@ -28,7 +28,6 @@ jest.mock('recharts', () => {
                 ))}
             </div>
         ),
-        Cell: () => <div data-testid="cell"/>,
         Tooltip: () => <div data-testid="tooltip"/>,
         Legend: () => <div data-testid="legend"/>,
     };
