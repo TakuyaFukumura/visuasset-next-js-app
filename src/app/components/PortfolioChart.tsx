@@ -1,13 +1,7 @@
 'use client';
 
 import {PieChart, Pie, Cell, Legend, Tooltip, ResponsiveContainer} from 'recharts';
-
-export interface PortfolioEntry {
-    name: string;
-    value: number;
-    percentage: number;
-    fill: string;
-}
+import type {PortfolioEntry} from '../types/portfolio';
 
 interface PortfolioChartProps {
     readonly data: PortfolioEntry[];

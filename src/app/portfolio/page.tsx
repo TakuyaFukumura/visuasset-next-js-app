@@ -17,7 +17,7 @@ export default async function PortfolioPage({
     }
 
     const years = allData.map((d) => d.year);
-    const latestYear = Math.max(...years);
+    const latestYear = allData[allData.length - 1].year;
 
     const yearParam = params.year ? parseInt(params.year, 10) : latestYear;
     const currentYear = years.includes(yearParam) ? yearParam : latestYear;
@@ -35,10 +35,9 @@ export default async function PortfolioPage({
         fill: GENRE_COLORS[key],
     }));
 
-    const sortedYears = [...years].sort((a, b) => a - b);
-    const currentIndex = sortedYears.indexOf(currentYear);
-    const prevYear = sortedYears[currentIndex - 1] ?? null;
-    const nextYear = sortedYears[currentIndex + 1] ?? null;
+    const currentIndex = years.indexOf(currentYear);
+    const prevYear = years[currentIndex - 1] ?? null;
+    const nextYear = years[currentIndex + 1] ?? null;
 
     return (
         <div className="font-sans min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">

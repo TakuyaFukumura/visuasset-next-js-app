@@ -1,4 +1,4 @@
-import type {PortfolioEntry} from './PortfolioChart';
+import type {PortfolioEntry} from '../types/portfolio';
 
 interface PortfolioTableProps {
     readonly data: PortfolioEntry[];

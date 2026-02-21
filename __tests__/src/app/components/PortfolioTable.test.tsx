@@ -6,7 +6,7 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import PortfolioTable from '../../../../src/app/components/PortfolioTable';
 import '@testing-library/jest-dom';
-import type {PortfolioEntry} from '../../../../src/app/components/PortfolioChart';
+import type {PortfolioEntry} from '../../../../src/app/types/portfolio';
 
 const sampleData: PortfolioEntry[] = [
     {name: '株式', value: 220, percentage: 37.931034482758626, fill: '#3b82f6'},

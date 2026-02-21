@@ -6,7 +6,7 @@ import React from 'react';
 import {render, screen} from '@testing-library/react';
 import PortfolioChart from '../../../../src/app/components/PortfolioChart';
 import '@testing-library/jest-dom';
-import type {PortfolioEntry} from '../../../../src/app/components/PortfolioChart';
+import type {PortfolioEntry} from '../../../../src/app/types/portfolio';
 
 // Recharts は jsdom 環境でグラフを描画できないためモックする
 jest.mock('recharts', () => {
