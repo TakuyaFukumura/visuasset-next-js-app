@@ -5,8 +5,8 @@ import PortfolioTable from '../components/PortfolioTable';
 import {GENRE_COLORS, GENRE_NAMES} from '../constants/genres';
 
 export default async function PortfolioPage({
-    searchParams,
-}: Readonly<{
+                                                searchParams,
+                                            }: Readonly<{
     searchParams: Promise<{ year?: string }>;
 }>) {
     const params = await searchParams;
@@ -40,7 +40,8 @@ export default async function PortfolioPage({
     const nextYear = years[currentIndex + 1] ?? null;
 
     return (
-        <div className="font-sans min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">
+        <div
+            className="font-sans min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">
             <main className="max-w-4xl mx-auto">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">資産ポートフォリオ</h2>
 
@@ -85,11 +86,11 @@ export default async function PortfolioPage({
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
-                    <PortfolioChart data={portfolioData} />
+                    <PortfolioChart data={portfolioData}/>
                 </div>
 
                 <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                    <PortfolioTable data={portfolioData} total={total} />
+                    <PortfolioTable data={portfolioData} total={total}/>
                 </div>
             </main>
         </div>
