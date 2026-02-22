@@ -9,9 +9,9 @@ import '@testing-library/jest-dom';
 import type {SimulationDataPoint} from '../../../../src/app/components/SimulationChart';
 
 const sampleData: SimulationDataPoint[] = [
-    {year: 2025, nominal: 1190, real: 1190},
-    {year: 2026, nominal: 1250, real: 1225},
-    {year: 2027, nominal: 1313, real: 1261},
+    {year: 2025, age: 28, nominal: 1190, real: 1190},
+    {year: 2026, age: 29, nominal: 1250, real: 1225},
+    {year: 2027, age: 30, nominal: 1313, real: 1261},
 ];
 
 describe('SimulationTable', () => {
@@ -24,6 +24,7 @@ describe('SimulationTable', () => {
         it('ヘッダー列が表示される', () => {
             render(<SimulationTable data={sampleData}/>);
             expect(screen.getByText('年')).toBeInTheDocument();
+            expect(screen.getByText('年齢（歳）')).toBeInTheDocument();
             expect(screen.getByText('名目資産額（万円）')).toBeInTheDocument();
             expect(screen.getByText('実質価値（万円）')).toBeInTheDocument();
         });
@@ -44,6 +45,13 @@ describe('SimulationTable', () => {
             expect(screen.getByText('2027')).toBeInTheDocument();
         });
 
+        it('年齢が正しく表示される', () => {
+            render(<SimulationTable data={sampleData}/>);
+            expect(screen.getByText('28')).toBeInTheDocument();
+            expect(screen.getByText('29')).toBeInTheDocument();
+            expect(screen.getByText('30')).toBeInTheDocument();
+        });
+
         it('名目資産額が正しく表示される', () => {
             render(<SimulationTable data={sampleData}/>);
             expect(screen.getAllByText('1,190').length).toBeGreaterThanOrEqual(1);
@@ -62,6 +70,7 @@ describe('SimulationTable', () => {
         it('データが空の場合もヘッダーは表示される', () => {
             render(<SimulationTable data={[]}/>);
             expect(screen.getByText('年')).toBeInTheDocument();
+            expect(screen.getByText('年齢（歳）')).toBeInTheDocument();
             expect(screen.getByText('名目資産額（万円）')).toBeInTheDocument();
             expect(screen.getByText('実質価値（万円）')).toBeInTheDocument();
         });

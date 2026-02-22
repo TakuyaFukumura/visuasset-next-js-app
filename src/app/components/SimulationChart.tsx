@@ -14,16 +14,18 @@ interface SimulationSettings {
     inflationRate: number;
     monthlyContribution: number;
     projectionYears: number;
+    startAge: number;
 }
 
 export interface SimulationDataPoint {
     year: number;
+    age: number;
     nominal: number;
     real: number;
 }
 
 export function calcSimulation(latestData: AssetData, settings: SimulationSettings): SimulationDataPoint[] {
-    const {annualYield, inflationRate, monthlyContribution, projectionYears} = settings;
+    const {annualYield, inflationRate, monthlyContribution, projectionYears, startAge} = settings;
     const r = annualYield / 100;
     const inflation = inflationRate / 100;
     const monthlyRate = r / 12;
@@ -48,6 +50,7 @@ export function calcSimulation(latestData: AssetData, settings: SimulationSettin
 
         result.push({
             year: startYear + n,
+            age: startAge + n,
             nominal: Math.round(nominal),
             real: Math.round(real),
         });
@@ -62,6 +65,7 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
         inflationRate: 2,
         monthlyContribution: 0,
         projectionYears: 30,
+        startAge: 28,
     });
 
     const data = useMemo(() => calcSimulation(latestData, settings), [latestData, settings]);
@@ -70,7 +74,7 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
         const value = Number(e.target.value);
         if (!Number.isFinite(value)) return;
         if (
-            (key === 'annualYield' || key === 'inflationRate' || key === 'monthlyContribution') &&
+            (key === 'annualYield' || key === 'inflationRate' || key === 'monthlyContribution' || key === 'startAge') &&
             value < 0
         ) {
             return;
@@ -84,7 +88,26 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
     return (
         <div>
             <div
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6 grid grid-cols-2 gap-4 sm:grid-cols-5">
+                <div>
+                    <label
+                        htmlFor="startAge"
+                        className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        開始年齢（歳）
+                    </label>
+                    <input
+                        id="startAge"
+                        type="number"
+                        min={0}
+                        max={150}
+                        step={1}
+                        value={settings.startAge}
+                        onChange={handleChange('startAge')}
+                        aria-describedby="startAge-desc"
+                        className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    <span id="startAge-desc" className="sr-only">シミュレーション開始時点の年齢を歳で入力してください（0以上）</span>
+                </div>
                 <div>
                     <label
                         htmlFor="annualYield"
