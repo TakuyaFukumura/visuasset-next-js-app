@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.0] - 2026-02-22
+
+### Added
+
+- 資産推移シミュレーション画面（`/simulation`）にグラフ下部の一覧表を追加
+- `src/app/components/SimulationTable.tsx`：シミュレーション結果（年・名目資産額・実質価値）を表示するテーブルコンポーネント
+- `__tests__/src/app/components/SimulationTable.test.tsx`：SimulationTable のユニットテスト
+
+### Changed
+
+- `src/app/components/SimulationChart.tsx`：`SimulationTable` コンポーネントをインポートし、グラフの下部に表を追加
+
 ## [0.3.1] - 2026-02-21
 
 ### Changed
