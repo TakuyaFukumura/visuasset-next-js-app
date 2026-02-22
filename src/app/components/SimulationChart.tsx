@@ -3,6 +3,7 @@
 import {useMemo, useState} from 'react';
 import {CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis,} from 'recharts';
 import type {AssetData} from '../../../lib/parseAssets';
+import SimulationTable from './SimulationTable';
 
 interface SimulationChartProps {
     readonly latestData: AssetData;
@@ -187,6 +188,10 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         />
                     </LineChart>
                 </ResponsiveContainer>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
+                <SimulationTable data={data}/>
             </div>
 
             <p className="text-xs text-gray-500 dark:text-gray-400">
