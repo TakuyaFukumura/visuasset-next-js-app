@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.5.0] - 2026-02-22
+
+### Added
+
+- 資産推移シミュレーション画面の設定パネルに開始年齢（歳）入力欄を追加（デフォルト28歳、画面上で変更可能）
+- `SimulationDataPoint` に `age` フィールドを追加し、各シミュレーション年の年齢を計算して保持
+- `SimulationTable.tsx`：年（西暦）列の横に年齢列を追加
+- `__tests__/src/app/components/SimulationChart.test.tsx`：開始年齢の表示・デフォルト値・変更・バリデーション・年齢インクリメントのテストを追加
+- `__tests__/src/app/components/SimulationTable.test.tsx`：年齢列のヘッダー・データ表示のテストを追加
+
 ## [0.4.0] - 2026-02-22
 
 ### Added
