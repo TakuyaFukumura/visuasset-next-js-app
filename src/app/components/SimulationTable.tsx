@@ -19,8 +19,8 @@ export default function SimulationTable({data}: SimulationTableProps) {
                 {data.map((row) => (
                     <tr key={row.year} className="hover:bg-gray-50 dark:hover:bg-gray-800">
                         <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{row.year}</td>
-                        <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{row.nominal}</td>
-                        <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{row.real}</td>
+                        <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{row.nominal.toLocaleString()}</td>
+                        <td className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">{row.real.toLocaleString()}</td>
                     </tr>
                 ))}
                 </tbody>
