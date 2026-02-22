@@ -262,5 +262,30 @@ describe('Header', () => {
             const link = screen.getByRole('link', {name: '資産推移'});
             expect(link).not.toHaveClass('text-blue-600');
         });
+
+        it('資産シミュレーションリンクが表示される', () => {
+            renderWithProvider();
+            expect(screen.getByText('資産シミュレーション')).toBeInTheDocument();
+        });
+
+        it('資産シミュレーションリンクのhref属性が正しい', () => {
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産シミュレーション'});
+            expect(link).toHaveAttribute('href', '/simulation');
+        });
+
+        it('シミュレーションページ（/simulation）ではシミュレーションリンクがアクティブ状態になる', () => {
+            mockUsePathname.mockReturnValue('/simulation');
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産シミュレーション'});
+            expect(link).toHaveClass('text-blue-600');
+        });
+
+        it('シミュレーションページ（/simulation）では資産推移リンクが非アクティブ状態になる', () => {
+            mockUsePathname.mockReturnValue('/simulation');
+            renderWithProvider();
+            const link = screen.getByRole('link', {name: '資産推移'});
+            expect(link).not.toHaveClass('text-blue-600');
+        });
     });
 });
