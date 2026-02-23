@@ -2,11 +2,13 @@
 
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
+import {useState} from 'react';
 import {useDarkMode} from './DarkModeProvider';
 
 export default function Header() {
     const {theme, setTheme} = useDarkMode();
     const pathname = usePathname();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     const handleThemeToggle = () => {
         if (theme === 'light') {
@@ -54,7 +56,7 @@ export default function Header() {
                         <h1 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
                             visuasset
                         </h1>
-                        <nav className="flex items-center gap-1">
+                        <nav className="hidden sm:flex items-center gap-1">
                             <Link href="/" className={navLinkClass('/')}>
                                 資産推移
                             </Link>
@@ -67,20 +69,58 @@ export default function Header() {
                         </nav>
                     </div>
 
-                    <div className="flex items-center">
+                    <div className="flex items-center gap-2">
                         <button
                             onClick={handleThemeToggle}
                             className="flex items-center gap-2 px-3 py-2 text-sm font-medium
                             text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
                             rounded-lg transition-colors duration-200"
                             title={`現在: ${getThemeLabel()}`}
+                            aria-label={`現在: ${getThemeLabel()}`}
                         >
                             <span className="text-lg">{getThemeIcon()}</span>
                             <span className="hidden sm:inline">{getThemeLabel()}</span>
                         </button>
+                        <button
+                            onClick={() => setMenuOpen((prev) => !prev)}
+                            className="sm:hidden flex items-center justify-center px-2 py-2 text-gray-700
+                            dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                            rounded-lg transition-colors duration-200"
+                            aria-label={menuOpen ? 'メニューを閉じる' : 'メニューを開く'}
+                            aria-expanded={menuOpen}
+                        >
+                            <span className="text-xl">{menuOpen ? '✕' : '☰'}</span>
+                        </button>
                     </div>
                 </div>
             </div>
+
+            {menuOpen && (
+                <div className="sm:hidden border-t border-gray-200 dark:border-gray-700
+                    bg-white/95 dark:bg-gray-800/95">
+                    <nav role="menu" className="flex flex-col px-4 py-2 gap-1">
+                        <Link href="/" role="menuitem" className={navLinkClass('/')} onClick={() => setMenuOpen(false)}>
+                            資産推移
+                        </Link>
+                        <Link
+                            href="/portfolio"
+                            role="menuitem"
+                            className={navLinkClass('/portfolio')}
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            資産ポートフォリオ
+                        </Link>
+                        <Link
+                            href="/simulation"
+                            role="menuitem"
+                            className={navLinkClass('/simulation')}
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            資産シミュレーション
+                        </Link>
+                    </nav>
+                </div>
+            )}
         </header>
     );
 }
