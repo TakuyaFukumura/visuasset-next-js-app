@@ -41,7 +41,7 @@ export default async function PortfolioPage({
 
     return (
         <div
-            className="font-sans min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-6">
+            className="font-sans min-h-[calc(100vh-4rem)] bg-linear-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-2 sm:p-6">
             <main className="max-w-4xl mx-auto">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">資産ポートフォリオ</h2>
 
