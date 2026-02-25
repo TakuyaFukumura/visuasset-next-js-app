@@ -13,13 +13,13 @@ jest.mock('recharts', () => {
     const OriginalModule = jest.requireActual('recharts');
     return {
         ...OriginalModule,
-        ResponsiveContainer: ({children}: {children: React.ReactNode}) => (
+        ResponsiveContainer: ({children}: { children: React.ReactNode }) => (
             <div data-testid="responsive-container">{children}</div>
         ),
-        LineChart: ({children}: {children: React.ReactNode}) => (
+        LineChart: ({children}: { children: React.ReactNode }) => (
             <div data-testid="line-chart">{children}</div>
         ),
-        Line: ({name}: {name: string}) => <div data-testid={`line-${name}`}/>,
+        Line: ({name}: { name: string }) => <div data-testid={`line-${name}`}/>,
         CartesianGrid: () => <div data-testid="cartesian-grid"/>,
         XAxis: () => <div data-testid="x-axis"/>,
         YAxis: () => <div data-testid="y-axis"/>,
@@ -198,7 +198,13 @@ describe('calcSimulation', () => {
     const baseData: AssetData = {year: 2025, stocks: 1000, cash: 150, crypto: 40};
 
     it('n=0 のとき初期値がそのまま返る', () => {
-        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 0, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 2,
+            monthlyContribution: 0,
+            projectionYears: 0,
+            startAge: 28
+        });
         expect(result).toHaveLength(1);
         expect(result[0].year).toBe(2025);
         expect(result[0].age).toBe(28);
@@ -207,46 +213,100 @@ describe('calcSimulation', () => {
     });
 
     it('利回り 0%・インフレ率 0%・積立額 0 のとき名目と実質が変化しない', () => {
-        const result = calcSimulation(baseData, {annualYield: 0, inflationRate: 0, monthlyContribution: 0, projectionYears: 10, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 0,
+            inflationRate: 0,
+            monthlyContribution: 0,
+            projectionYears: 10,
+            startAge: 28
+        });
         const last = result[result.length - 1];
         expect(last.nominal).toBe(1190);
         expect(last.real).toBe(1190);
     });
 
     it('利回りが正のとき名目資産額が増加する', () => {
-        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 0, monthlyContribution: 0, projectionYears: 10, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 0,
+            monthlyContribution: 0,
+            projectionYears: 10,
+            startAge: 28
+        });
         expect(result[10].nominal).toBeGreaterThan(result[0].nominal);
     });
 
     it('インフレ率が正のとき実質価値は名目資産額より小さい（n>0）', () => {
-        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 10, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 2,
+            monthlyContribution: 0,
+            projectionYears: 10,
+            startAge: 28
+        });
         expect(result[10].real).toBeLessThan(result[10].nominal);
     });
 
     it('月々の積立額が正のとき名目資産額がさらに増加する', () => {
-        const withContrib = calcSimulation(baseData, {annualYield: 5, inflationRate: 0, monthlyContribution: 10, projectionYears: 10, startAge: 28});
-        const withoutContrib = calcSimulation(baseData, {annualYield: 5, inflationRate: 0, monthlyContribution: 0, projectionYears: 10, startAge: 28});
+        const withContrib = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 0,
+            monthlyContribution: 10,
+            projectionYears: 10,
+            startAge: 28
+        });
+        const withoutContrib = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 0,
+            monthlyContribution: 0,
+            projectionYears: 10,
+            startAge: 28
+        });
         expect(withContrib[10].nominal).toBeGreaterThan(withoutContrib[10].nominal);
     });
 
     it('返り値の要素数がシミュレーション期間 + 1 である', () => {
-        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 30, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 2,
+            monthlyContribution: 0,
+            projectionYears: 30,
+            startAge: 28
+        });
         expect(result).toHaveLength(31);
     });
 
     it('年が連続して正しくインクリメントされる', () => {
-        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 3, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 2,
+            monthlyContribution: 0,
+            projectionYears: 3,
+            startAge: 28
+        });
         expect(result.map((d) => d.year)).toEqual([2025, 2026, 2027, 2028]);
     });
 
     it('年齢が開始年齢から連続して正しくインクリメントされる', () => {
-        const result = calcSimulation(baseData, {annualYield: 5, inflationRate: 2, monthlyContribution: 0, projectionYears: 3, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 5,
+            inflationRate: 2,
+            monthlyContribution: 0,
+            projectionYears: 3,
+            startAge: 28
+        });
         expect(result.map((d) => d.age)).toEqual([28, 29, 30, 31]);
     });
 
     it('利回り 0%・積立額あり のとき積立分だけ増加する', () => {
         const monthlyContribution = 5;
-        const result = calcSimulation(baseData, {annualYield: 0, inflationRate: 0, monthlyContribution, projectionYears: 1, startAge: 28});
+        const result = calcSimulation(baseData, {
+            annualYield: 0,
+            inflationRate: 0,
+            monthlyContribution,
+            projectionYears: 1,
+            startAge: 28
+        });
         // 1年後: stocks + monthlyContribution×12ヶ月、cash・cryptoは変化なし
         const expectedNominal = baseData.stocks + monthlyContribution * 12 + baseData.cash + baseData.crypto;
         expect(result[1].nominal).toBe(expectedNominal);

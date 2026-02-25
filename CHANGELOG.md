@@ -11,7 +11,8 @@
 ### Changed
 
 - `src/app/components/Header.tsx`：ハンバーガーボタンをヘッダー左上に配置、デスクトップではナビを横並びで表示
-- `src/app/page.tsx` / `src/app/portfolio/page.tsx` / `src/app/simulation/page.tsx`：ページのパディングを `p-6` から `p-2 sm:p-6` に変更し、モバイルでのグラフ描画エリアを拡大
+- `src/app/page.tsx` / `src/app/portfolio/page.tsx` / `src/app/simulation/page.tsx`：ページのパディングを `p-6` から
+  `p-2 sm:p-6` に変更し、モバイルでのグラフ描画エリアを拡大
 
 ### Removed
 
@@ -43,7 +44,8 @@
 
 ### Changed
 
-- `src/app/components/PortfolioChart.tsx`：recharts の非推奨コンポーネント `Cell` を削除し、データの `fill` プロパティを `Pie` が直接読み込む方式に変更（`TS6385: 'Cell' is deprecated.` 警告の対応）
+- `src/app/components/PortfolioChart.tsx`：recharts の非推奨コンポーネント `Cell` を削除し、データの `fill` プロパティを
+  `Pie` が直接読み込む方式に変更（`TS6385: 'Cell' is deprecated.` 警告の対応）
 
 ## [0.3.0] - 2026-02-21
 

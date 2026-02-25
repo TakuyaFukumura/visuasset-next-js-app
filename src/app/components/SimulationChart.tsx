@@ -106,7 +106,8 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         aria-describedby="startAge-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <span id="startAge-desc" className="sr-only">シミュレーション開始時点の年齢を歳で入力してください（0以上）</span>
+                    <span id="startAge-desc"
+                          className="sr-only">シミュレーション開始時点の年齢を歳で入力してください（0以上）</span>
                 </div>
                 <div>
                     <label
@@ -125,7 +126,8 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         aria-describedby="annualYield-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <span id="annualYield-desc" className="sr-only">株式資産に適用する年間運用利回りをパーセントで入力してください（0〜100）</span>
+                    <span id="annualYield-desc"
+                          className="sr-only">株式資産に適用する年間運用利回りをパーセントで入力してください（0〜100）</span>
                 </div>
                 <div>
                     <label
@@ -144,7 +146,8 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         aria-describedby="inflationRate-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <span id="inflationRate-desc" className="sr-only">物価上昇率をパーセントで入力してください（0〜100）</span>
+                    <span id="inflationRate-desc"
+                          className="sr-only">物価上昇率をパーセントで入力してください（0〜100）</span>
                 </div>
                 <div>
                     <label
@@ -162,7 +165,8 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         aria-describedby="monthlyContribution-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <span id="monthlyContribution-desc" className="sr-only">毎月追加で積み立てる金額を万円単位で入力してください（0以上）</span>
+                    <span id="monthlyContribution-desc"
+                          className="sr-only">毎月追加で積み立てる金額を万円単位で入力してください（0以上）</span>
                 </div>
                 <div>
                     <label
@@ -181,7 +185,8 @@ export default function SimulationChart({latestData}: SimulationChartProps) {
                         aria-describedby="projectionYears-desc"
                         className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
-                    <span id="projectionYears-desc" className="sr-only">シミュレーションする期間を年単位で入力してください（1〜50）</span>
+                    <span id="projectionYears-desc"
+                          className="sr-only">シミュレーションする期間を年単位で入力してください（1〜50）</span>
                 </div>
             </div>
 
