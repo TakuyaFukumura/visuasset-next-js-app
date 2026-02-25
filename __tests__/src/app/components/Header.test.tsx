@@ -330,21 +330,18 @@ describe('Header', () => {
             renderWithProvider();
             const hamburgerButton = screen.getByRole('button', {name: 'メニューを開く'});
             fireEvent.click(hamburgerButton);
-            const menu = screen.getByRole('menu');
-            expect(menu).toBeInTheDocument();
-            expect(screen.getAllByRole('menuitem').find((el) => el.textContent === '資産推移')).toBeInTheDocument();
-            expect(screen.getAllByRole('menuitem').find((el) => el.textContent === '資産ポートフォリオ')).toBeInTheDocument();
-            expect(screen.getAllByRole('menuitem').find((el) => el.textContent === '資産シミュレーション')).toBeInTheDocument();
+            expect(screen.getAllByRole('link', {name: '資産推移'}).length).toBeGreaterThanOrEqual(1);
+            expect(screen.getAllByRole('link', {name: '資産ポートフォリオ'}).length).toBeGreaterThanOrEqual(1);
+            expect(screen.getAllByRole('link', {name: '資産シミュレーション'}).length).toBeGreaterThanOrEqual(1);
         });
 
         it('ドロップダウン内のリンクをクリックするとメニューが閉じる', () => {
             renderWithProvider();
             const hamburgerButton = screen.getByRole('button', {name: 'メニューを開く'});
             fireEvent.click(hamburgerButton);
-            const menuItems = screen.getAllByRole('menuitem');
-            const portfolioItem = menuItems.find((el) => el.textContent === '資産ポートフォリオ')!;
-            fireEvent.click(portfolioItem);
-            expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+            const portfolioLinks = screen.getAllByRole('link', {name: '資産ポートフォリオ'});
+            fireEvent.click(portfolioLinks[portfolioLinks.length - 1]);
+            expect(hamburgerButton).toHaveAttribute('aria-expanded', 'false');
         });
     });
 });

@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.6.0] - 2026-02-25
+
+### Added
+
+- スマートフォン対応：モバイル（640px 未満）でハンバーガーメニューを導入（左上に☰/✕トグルボタンを表示）
+- タップでナビゲーションリンクのドロップダウンを開閉、リンクをクリックすると自動で閉じる
+- `aria-label` / `aria-expanded` によるアクセシビリティ対応
+
+### Changed
+
+- `src/app/components/Header.tsx`：ハンバーガーボタンをヘッダー左上に配置、デスクトップではナビを横並びで表示
+- `src/app/page.tsx` / `src/app/portfolio/page.tsx` / `src/app/simulation/page.tsx`：ページのパディングを `p-6` から `p-2 sm:p-6` に変更し、モバイルでのグラフ描画エリアを拡大
+
+### Removed
+
+- `docs/smartphone-support.md`（実装完了のため削除）
+
 ## [0.5.0] - 2026-02-22
 
 ### Added
