@@ -76,6 +76,9 @@ export default function Header() {
                             <Link href="/simulation" className={navLinkClass('/simulation')}>
                                 資産シミュレーション
                             </Link>
+                            <Link href="/living-expense" className={navLinkClass('/living-expense')}>
+                                生活費換算
+                            </Link>
                         </nav>
                     </div>
 
@@ -115,6 +118,13 @@ export default function Header() {
                             onClick={() => setMenuOpen(false)}
                         >
                             資産シミュレーション
+                        </Link>
+                        <Link
+                            href="/living-expense"
+                            className={navLinkClass('/living-expense')}
+                            onClick={() => setMenuOpen(false)}
+                        >
+                            生活費換算
                         </Link>
                     </nav>
                 </div>

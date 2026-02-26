@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.7.0] - 2026-02-26
+
+### Added
+
+- 生活費換算シミュレーション画面（`/living-expense`）を新規追加
+- `src/app/components/LivingExpenseSettings.tsx`：設定エリア（生活費・実利回り入力）と状態管理を担うクライアントコンポーネント。`calcLivingExpenseSimulation` 関数をエクスポート
+- `src/app/components/LivingExpenseChart.tsx`：Recharts `LineChart` を用いた資産推移折れ線グラフコンポーネント
+- `src/app/components/LivingExpenseTable.tsx`：年次残高（経過年数・西暦・資産残高・生活費換算）を表示するテーブルコンポーネント
+- `__tests__/src/app/components/LivingExpenseSettings.test.tsx`：LivingExpenseSettings および calcLivingExpenseSimulation のユニットテスト
+
+### Changed
+
+- `src/app/components/Header.tsx`：「生活費換算」へのナビゲーションリンクをデスクトップ・モバイルメニュー両方に追加
+
+### Removed
+
+- `docs/living-expense-conversion.md`（実装完了のため削除）
+
 ## [0.6.0] - 2026-02-25
 
 ### Added
