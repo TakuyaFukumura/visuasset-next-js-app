@@ -1,9 +1,18 @@
 import {parseAssets} from '../../lib/parseAssets';
-import AssetChart from './components/AssetChart';
-import AssetTable from './components/AssetTable';
+import {parseMonthlyAssets} from '../../lib/parseMonthlyAssets';
+import type {MonthlyAssetData} from '../../lib/parseMonthlyAssets';
+import AssetView from './components/AssetView';
 
 export default function Home() {
-    const data = parseAssets();
+    const yearlyData = parseAssets();
+
+    let monthlyData: MonthlyAssetData[] | null = null;
+    let monthlyError: string | null = null;
+    try {
+        monthlyData = parseMonthlyAssets();
+    } catch {
+        monthlyError = '月次データの読み込みに失敗しました';
+    }
 
     return (
         <div
@@ -11,13 +20,11 @@ export default function Home() {
             <main className="max-w-4xl mx-auto">
                 <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-200">資産推移</h2>
 
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6">
-                    <AssetChart data={data}/>
-                </div>
-
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-                    <AssetTable data={data}/>
-                </div>
+                <AssetView
+                    yearlyData={yearlyData}
+                    monthlyData={monthlyData}
+                    monthlyError={monthlyError}
+                />
             </main>
         </div>
     );

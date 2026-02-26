@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.8.0] - 2026-02-26
+
+### Added
+
+- 資産推移画面（`/`）に月次モードを追加
+- `data/assets_monthly.csv`：月次サンプルデータ（`year,month,stocks,cash,crypto` 形式）
+- `lib/parseMonthlyAssets.ts`：月次 CSV のパース処理（`MonthlyAssetData` 型定義、バリデーション含む）
+- `src/app/components/AssetMonthlyChart.tsx`：月次折れ線グラフコンポーネント（Recharts `LineChart` 使用）
+- `src/app/components/AssetMonthlyTable.tsx`：月次データテーブルコンポーネント（年月 `YYYY/MM` 形式表示）
+- `src/app/components/AssetView.tsx`：年次／月次切り替えトグルと表示切替を担うクライアントコンポーネント
+- `__tests__/lib/parseMonthlyAssets.test.ts`：parseMonthlyAssets のユニットテスト
+
+### Changed
+
+- `src/app/page.tsx`：`AssetView` コンポーネントを使用し、年次・月次データを渡す構成に変更
+
+### Removed
+
+- `docs/monthly-mode-spec.md`（実装完了のため削除）
+
 ## [0.7.0] - 2026-02-26
 
 ### Added
