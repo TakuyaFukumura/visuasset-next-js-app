@@ -12,6 +12,7 @@ export default function AssetMonthlyChart({data}: AssetMonthlyChartProps) {
     const chartData = data.map((row) => ({
         ...row,
         yearMonth: `${row.year}/${String(row.month).padStart(2, '0')}`,
+        total: row.stocks + row.cash + row.crypto,
     }));
 
     return (
@@ -25,6 +26,7 @@ export default function AssetMonthlyChart({data}: AssetMonthlyChartProps) {
                 <Line type="monotone" dataKey="stocks" name={GENRE_NAMES.stocks} stroke={GENRE_COLORS.stocks} dot={false}/>
                 <Line type="monotone" dataKey="cash" name={GENRE_NAMES.cash} stroke={GENRE_COLORS.cash} dot={false}/>
                 <Line type="monotone" dataKey="crypto" name={GENRE_NAMES.crypto} stroke={GENRE_COLORS.crypto} dot={false}/>
+                <Line type="monotone" dataKey="total" name="合計" stroke="#6366f1" dot={false}/>
             </LineChart>
         </ResponsiveContainer>
     );

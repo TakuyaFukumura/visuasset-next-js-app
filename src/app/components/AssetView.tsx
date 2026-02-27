@@ -23,6 +23,8 @@ export default function AssetView({yearlyData, monthlyData, monthlyError}: Asset
         <>
             <div className="flex gap-2 mb-6">
                 <button
+                    type="button"
+                    aria-pressed={mode === 'yearly'}
                     onClick={() => setMode('yearly')}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                         mode === 'yearly'
@@ -33,6 +35,8 @@ export default function AssetView({yearlyData, monthlyData, monthlyError}: Asset
                     年次
                 </button>
                 <button
+                    type="button"
+                    aria-pressed={mode === 'monthly'}
                     onClick={() => setMode('monthly')}
                     className={`px-4 py-2 rounded-lg font-medium transition-colors ${
                         mode === 'monthly'
