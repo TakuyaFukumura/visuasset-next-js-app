@@ -7,7 +7,7 @@ type Theme = 'light' | 'dark';
 const isTheme = (value: string | null): value is Theme => value === 'light' || value === 'dark';
 
 const getStoredTheme = (): Theme => {
-    if (typeof window === 'undefined') {
+    if (typeof globalThis.window === 'undefined') {
         return 'light';
     }
 
