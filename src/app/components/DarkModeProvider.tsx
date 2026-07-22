@@ -4,6 +4,17 @@ import {createContext, ReactNode, useContext, useEffect, useMemo, useState} from
 
 type Theme = 'light' | 'dark';
 
+const isTheme = (value: string | null): value is Theme => value === 'light' || value === 'dark';
+
+const getStoredTheme = (): Theme => {
+    if (typeof window === 'undefined') {
+        return 'light';
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    return isTheme(savedTheme) ? savedTheme : 'light';
+};
+
 interface DarkModeContextType {
     theme: Theme;
     setTheme: (theme: Theme) => void;
@@ -13,34 +24,18 @@ interface DarkModeContextType {
 const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined);
 
 export function DarkModeProvider({children}: { readonly children: ReactNode }) {
-    const [theme, setTheme] = useState<Theme>('light');
-    const [isDark, setIsDark] = useState(false);
+    const [theme, setTheme] = useState<Theme>(getStoredTheme);
+    const isDark = theme === 'dark';
 
     useEffect(() => {
-        // ブラウザ環境のみlocalStorageにアクセス
-        if (globalThis.window !== undefined) {
-            const savedTheme = localStorage.getItem('theme') as Theme;
-            if (savedTheme && ['light', 'dark'].includes(savedTheme)) {
-                setTheme(savedTheme);
-            }
+        // HTMLタグにdarkクラスを追加/削除
+        if (isDark) {
+            document.documentElement.classList.add('dark');
+            return;
         }
-    }, []);
 
-    useEffect(() => {
-        const updateTheme = () => {
-            const isDarkMode = theme === 'dark';
-            setIsDark(isDarkMode);
-
-            // HTMLタグにdarkクラスを追加/削除
-            if (isDarkMode) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        };
-
-        updateTheme();
-    }, [theme]);
+        document.documentElement.classList.remove('dark');
+    }, [isDark]);
 
     const handleSetTheme = (newTheme: Theme) => {
         setTheme(newTheme);
