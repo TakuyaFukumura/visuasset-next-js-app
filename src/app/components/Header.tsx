@@ -26,14 +26,6 @@ export default function Header() {
         }
     };
 
-    const getThemeLabel = () => {
-        if (theme === 'light') {
-            return 'ライトモード';
-        } else {
-            return 'ダークモード';
-        }
-    };
-
     const navLinkClass = (href: string) => {
         const isActive =
             pathname !== null &&
@@ -85,14 +77,13 @@ export default function Header() {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={handleThemeToggle}
-                            className="flex items-center gap-2 px-3 py-2 text-sm font-medium
+                            className="flex items-center px-3 py-2 text-sm font-medium
                             text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
                             rounded-lg transition-colors duration-200"
-                            title={`現在: ${getThemeLabel()}`}
-                            aria-label={`現在: ${getThemeLabel()}`}
+                            title="テーマを切り替え"
+                            aria-label="テーマを切り替え"
                         >
                             <span className="text-lg">{getThemeIcon()}</span>
-                            <span className="hidden sm:inline">{getThemeLabel()}</span>
                         </button>
                     </div>
                 </div>
