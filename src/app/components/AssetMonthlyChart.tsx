@@ -21,7 +21,12 @@ export default function AssetMonthlyChart({data}: AssetMonthlyChartProps) {
                 <CartesianGrid strokeDasharray="3 3"/>
                 <XAxis dataKey="yearMonth"/>
                 <YAxis unit="万円"/>
-                <Tooltip formatter={(value) => `${value}万円`}/>
+                <Tooltip
+                    formatter={(value) => `${value}万円`}
+                    contentStyle={{backgroundColor: '#ffffff', border: '1px solid #d1d5db', color: '#111827'}}
+                    labelStyle={{color: '#111827'}}
+                    itemStyle={{color: '#111827'}}
+                />
                 <Legend/>
                 <Line type="monotone" dataKey="stocks" name={GENRE_NAMES.stocks} stroke={GENRE_COLORS.stocks} dot={false}/>
                 <Line type="monotone" dataKey="cash" name={GENRE_NAMES.cash} stroke={GENRE_COLORS.cash} dot={false}/>
