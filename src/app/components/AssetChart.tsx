@@ -15,7 +15,12 @@ export default function AssetChart({data}: AssetChartProps) {
                 <CartesianGrid strokeDasharray="3 3"/>
                 <XAxis dataKey="year"/>
                 <YAxis unit="万円"/>
-                <Tooltip formatter={(value) => `${value}万円`}/>
+                <Tooltip
+                    formatter={(value) => `${value}万円`}
+                    contentStyle={{backgroundColor: '#ffffff', border: '1px solid #d1d5db', color: '#111827'}}
+                    labelStyle={{color: '#111827'}}
+                    itemStyle={{color: '#111827'}}
+                />
                 <Legend/>
                 <Bar dataKey="stocks" name={GENRE_NAMES.stocks} stackId="a" fill={GENRE_COLORS.stocks}/>
                 <Bar dataKey="cash" name={GENRE_NAMES.cash} stackId="a" fill={GENRE_COLORS.cash}/>
