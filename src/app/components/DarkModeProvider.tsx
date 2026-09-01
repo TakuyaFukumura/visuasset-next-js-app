@@ -6,15 +6,6 @@ type Theme = 'light' | 'dark';
 
 const isTheme = (value: string | null): value is Theme => value === 'light' || value === 'dark';
 
-const getStoredTheme = (): Theme => {
-    if (typeof window === 'undefined') {
-        return 'light';
-    }
-
-    const savedTheme = localStorage.getItem('theme');
-    return isTheme(savedTheme) ? savedTheme : 'light';
-};
-
 interface DarkModeContextType {
     theme: Theme;
     setTheme: (theme: Theme) => void;
@@ -24,8 +15,16 @@ interface DarkModeContextType {
 const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined);
 
 export function DarkModeProvider({children}: { readonly children: ReactNode }) {
-    const [theme, setTheme] = useState<Theme>(getStoredTheme);
+    // Keep the first render identical on the server and client, then restore the preference.
+    const [theme, setTheme] = useState<Theme>('light');
     const isDark = theme === 'dark';
+
+    useEffect(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (isTheme(savedTheme)) {
+            setTheme(savedTheme);
+        }
+    }, []);
 
     useEffect(() => {
         // HTMLタグにdarkクラスを追加/削除
