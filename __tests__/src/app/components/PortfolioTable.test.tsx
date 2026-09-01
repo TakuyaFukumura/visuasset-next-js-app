@@ -24,7 +24,7 @@ describe('PortfolioTable', () => {
 
         it('ヘッダー列が表示される', () => {
             render(<PortfolioTable data={sampleData} total={sampleTotal}/>);
-            expect(screen.getByText('ジャンル')).toBeInTheDocument();
+            expect(screen.getByText('カテゴリ')).toBeInTheDocument();
             expect(screen.getByText('金額（万円）')).toBeInTheDocument();
             expect(screen.getByText('割合（%）')).toBeInTheDocument();
         });
@@ -36,7 +36,7 @@ describe('PortfolioTable', () => {
             expect(rows).toHaveLength(5);
         });
 
-        it('ジャンル名が正しく表示される', () => {
+        it('カテゴリ名が正しく表示される', () => {
             render(<PortfolioTable data={sampleData} total={sampleTotal}/>);
             expect(screen.getByText('株式')).toBeInTheDocument();
             expect(screen.getByText('現預金')).toBeInTheDocument();
@@ -80,7 +80,7 @@ describe('PortfolioTable', () => {
     describe('空データ', () => {
         it('データが空の場合もヘッダーと合計行は表示される', () => {
             render(<PortfolioTable data={[]} total={0}/>);
-            expect(screen.getByText('ジャンル')).toBeInTheDocument();
+            expect(screen.getByText('カテゴリ')).toBeInTheDocument();
             expect(screen.getByText('合計')).toBeInTheDocument();
         });
     });
