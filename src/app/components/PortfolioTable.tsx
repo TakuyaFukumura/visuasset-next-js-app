@@ -11,7 +11,7 @@ export default function PortfolioTable({data, total}: PortfolioTableProps) {
             <table className="w-full border-collapse text-sm">
                 <thead>
                 <tr className="bg-gray-100 dark:bg-gray-700">
-                    <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">ジャンル</th>
+                    <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-left">カテゴリ</th>
                     <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">金額（万円）</th>
                     <th className="border border-gray-300 dark:border-gray-600 px-4 py-2 text-right">割合（%）</th>
                 </tr>
