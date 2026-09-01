@@ -22,6 +22,8 @@ export function DarkModeProvider({children}: { readonly children: ReactNode }) {
     useEffect(() => {
         const savedTheme = localStorage.getItem('theme');
         if (isTheme(savedTheme)) {
+            // Restore browser-only state after hydration to avoid mismatched server markup.
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setTheme(savedTheme);
         }
     }, []);
